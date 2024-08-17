@@ -4,53 +4,53 @@ import { ethers } from "ethers";
 
 const delay = (ms) => new Promise((res) => setTimeout(res, ms));
 
-async function contractExecuteFcn(walletData, contractAddress) {
-	console.log(`\n=======================================`);
-	console.log(`- Executing the smart contract...🟠`);
+async function contractExecuteFcn(walletData, contractAddress, score) {
+    console.log(`\n=======================================`);
+    console.log(`- Executing the smart contract...🟠`);
 
-	// ETHERS PROVIDER AND SIGNER
-	const provider = walletData[1];
-	const signer = provider.getSigner();
+    // ETHERS PROVIDER AND SIGNER
+    const provider = walletData[1];
+    const signer = provider.getSigner();
 
-	// EXECUTE THE SMART CONTRACT
-	let txHash;
-	let finalCount;
-	try {
-		// CHECK SMART CONTRACT STATE
-		const initialCount = await getCountState();
-		console.log(`- Initial count: ${initialCount}`);
+    // EXECUTE THE SMART CONTRACT
+    let txHash;
+    let finalLeaderboard;
+    try {
+        // EXECUTE CONTRACT FUNCTION TO ADD SCORE
+        const gasLimit = 100000;
+        const myContract = new ethers.Contract(contractAddress, abi, signer);
+        const addScoreTx = await myContract.addScore(score, { gasLimit: gasLimit });
+        const addScoreRx = await addScoreTx.wait();
+        txHash = addScoreRx.transactionHash;
 
-		// EXECUTE CONTRACT FUNCTION
-		const gasLimit = 100000;
-		const myContract = new ethers.Contract(contractAddress, abi, signer);
-		const incrementTx = await myContract.increment({ gasLimit: gasLimit });
-		const incrementRx = await incrementTx.wait();
-		txHash = incrementRx.transactionHash;
+        // WAIT FOR THE TRANSACTION TO BE MINED
+        await delay(5000); // DELAY TO ALLOW MIRROR NODES TO UPDATE BEFORE QUERYING
 
-		// CHECK SMART CONTRACT STATE AGAIN
-		await delay(5000); // DELAY TO ALLOW MIRROR NODES TO UPDATE BEFORE QUERYING
+        // GET THE LEADERBOARD STATE
+        finalLeaderboard = await getLeaderboardState();
+        console.log(`- Score added. Transaction hash: \n${txHash} ✅`);
+        console.log(`- Final leaderboard:`, finalLeaderboard);
+    } catch (executeError) {
+        console.log(`- ${executeError.message.toString()}`);
+    }
 
-		finalCount = await getCountState();
-		console.log(`- Final count: ${finalCount}`);
-		console.log(`- Contract executed. Transaction hash: \n${txHash} ✅`);
-	} catch (executeError) {
-		console.log(`- ${executeError.message.toString()}`);
-	}
+    return [txHash, finalLeaderboard];
 
-	return [txHash, finalCount];
+    async function getLeaderboardState() {
+        const leaderboardInfo = await axios.get(`https://${walletData[2]}.mirrornode.hedera.com/api/v1/contracts/${contractAddress}/state`);
 
-	async function getCountState() {
-		let countDec;
-		const countInfo = await axios.get(`https://${walletData[2]}.mirrornode.hedera.com/api/v1/contracts/${contractAddress}/state`);
-
-		if (countInfo.data.state[0] !== undefined) {
-			const countHex = countInfo.data.state[0].value;
-			countDec = parseInt(countHex, 16);
-		} else {
-			countDec = 0;
-		}
-		return countDec;
-	}
+        let leaderboard = [];
+        if (leaderboardInfo.data.state.length > 0) {
+            leaderboard = leaderboardInfo.data.state.map((entry) => {
+                const playerAddress = entry.playerAddress;
+                const scoreHex = entry.score;
+                const timestamp = entry.timestamp;
+                const scoreDec = parseInt(scoreHex, 16);
+                return { playerAddress, score: scoreDec, timestamp };
+            });
+        }
+        return leaderboard;
+    }
 }
 
 export default contractExecuteFcn;

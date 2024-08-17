@@ -36,7 +36,7 @@ contract QuizLeaderboard {
         // Sort the array by score in ascending order
         for (uint256 i = 0; i < sortedLeaderboard.length; i++) {
             for (uint256 j = i + 1; j < sortedLeaderboard.length; j++) {
-                if (sortedLeaderboard[i].score > sortedLeaderboard[j].score) {
+                if (sortedLeaderboard[i].score < sortedLeaderboard[j].score) {
                     // Swap the elements
                     PlayerScore memory temp = sortedLeaderboard[i];
                     sortedLeaderboard[i] = sortedLeaderboard[j];

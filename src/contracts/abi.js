@@ -1,5 +1,18 @@
 const abi = [
 	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_score",
+				"type": "uint256"
+			}
+		],
+		"name": "addScore",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
 		"anonymous": false,
 		"inputs": [
 			{
@@ -23,19 +36,6 @@ const abi = [
 		],
 		"name": "ScoreAdded",
 		"type": "event"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_score",
-				"type": "uint256"
-			}
-		],
-		"name": "addScore",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
 	},
 	{
 		"inputs": [],
