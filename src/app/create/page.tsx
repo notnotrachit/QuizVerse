@@ -2,8 +2,10 @@
 import { useState } from "react";
 // import { MdDelete } from "react-icons/md";
 import { RiDeleteBin6Fill } from "react-icons/ri";
-import { useIsLoggedIn } from "@dynamic-labs/sdk-react-core";
-import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
+import { useAccount } from "wagmi";
+
+// import { useIsLoggedIn } from "@dynamic-labs/sdk-react-core";
+// import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
 
 export default function Home() {
   const [questions, setQuestions] = useState<Question[]>([]);
@@ -11,18 +13,14 @@ export default function Home() {
   const [quizDescription, setQuizDescription] = useState<string>("");
   const [loadingAI, setLoadingAI] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
-  const isLoggedIn = useIsLoggedIn();
-  // console.log(isLoggedIn);
-  const { sdkHasLoaded, primaryWallet } = useDynamicContext();
-  if (!sdkHasLoaded) {
-    return (
-      <div className="flex justify-center p-24 min-h-screen items-center">
-        Loading...
-      </div>
-    );
-  }
+  const { address, isConnecting, isDisconnected } = useAccount();
 
-  if (!isLoggedIn) {
+  // const isLoggedIn = useIsLoggedIn();
+  // console.log(isLoggedIn);
+  // const { sdkHasLoaded, primaryWallet } = useDynamicContext();
+
+
+  if (!address) {
     return (
       <div className="flex justify-center p-24 min-h-screen items-center">
         Not logged in
@@ -40,6 +38,7 @@ export default function Home() {
   async function createQuiz() {
     // validate quiz, each question should have an answer ans at least 2 options
     setLoading(true);
+    console.log(questions);
     if (
       questions.some(
         (question) =>
@@ -49,6 +48,7 @@ export default function Home() {
       )
     ) {
       alert("Please fill all the fields");
+      setLoading(false);
       return;
     }
 
@@ -63,7 +63,7 @@ export default function Home() {
           quiz_data: questions,
           quiz_name: quizName,
           quiz_description: quizDescription,
-          user_address: primaryWallet?.address,
+          user_address: address,
         }),
       }
     )
@@ -217,6 +217,19 @@ export default function Home() {
                             ? { checked: true }
                             : {})}
                           onChange={(e) =>
+                            setQuestions(
+                              questions.map((q, qIndex) => {
+                                if (qIndex === index) {
+                                  return {
+                                    ...q,
+                                    answer: q.options[optionIndex],
+                                  };
+                                }
+                                return q;
+                              })
+                            )
+                          }
+                          onSelect={(e) =>
                             setQuestions(
                               questions.map((q, qIndex) => {
                                 if (qIndex === index) {

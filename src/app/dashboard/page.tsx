@@ -1,15 +1,18 @@
 "use client";
 import { useState, useEffect } from "react";
-import { useIsLoggedIn } from "@dynamic-labs/sdk-react-core";
-import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
+// import { useIsLoggedIn } from "@dynamic-labs/sdk-react-core";
+// import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
 import Link from "next/link";
 import { Meteors } from "@/components/ui/meteors";
 import { FaShareAlt } from "react-icons/fa";
+import { useAccount } from "wagmi";
+
 // import { useSearchParams } from "next/navigation";
 
 export default function Play() {
-  const isLoggedIn = useIsLoggedIn();
-  const { sdkHasLoaded, primaryWallet } = useDynamicContext();
+  // const isLoggedIn = useIsLoggedIn();
+  // const { sdkHasLoaded, primaryWallet } = useDynamicContext();
+  const { address, isConnecting, isDisconnected } = useAccount();
   const [quizzes, setQuizzes] = useState<any>([]);
   const [loading, setLoading] = useState(false);
 
@@ -22,7 +25,7 @@ export default function Play() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ user_address: primaryWallet?.address }),
+        body: JSON.stringify({ user_address: address }),
       }
     ).then((response) => {
       response.json().then((data) => {
@@ -33,21 +36,21 @@ export default function Play() {
     });
   }
   useEffect(() => {
-    if (isLoggedIn) {
+    if (address) {
       get_user_quiz();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoggedIn, primaryWallet]);
+  }, [address]);
 
-  if (!sdkHasLoaded) {
-    return (
-      <div className="flex justify-center p-24 min-h-screen items-center">
-        Loading...
-      </div>
-    );
-  }
+  // if (!isConnecting) {
+  //   return (
+  //     <div className="flex justify-center p-24 min-h-screen items-center">
+  //       Loading...
+  //     </div>
+  //   );
+  // }
 
-  if (!isLoggedIn) {
+  if (!address) {
     return (
       <div className="flex justify-center p-24 min-h-screen items-center">
         Not logged in
