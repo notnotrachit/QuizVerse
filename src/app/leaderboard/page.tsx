@@ -1,13 +1,13 @@
 "use client";
 import { useState, useEffect } from "react";
-import { useIsLoggedIn } from "@dynamic-labs/sdk-react-core";
-import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
+// import { useIsLoggedIn } from "@dynamic-labs/sdk-react-core";
+// import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
 import { useSearchParams } from "next/navigation";
 import { SiSpacemacs } from "react-icons/si";
 
 export default function Play() {
-  const isLoggedIn = useIsLoggedIn();
-  const { sdkHasLoaded, primaryWallet } = useDynamicContext();
+  // const isLoggedIn = useIsLoggedIn();
+  // const { sdkHasLoaded, primaryWallet } = useDynamicContext();
   const searchParams = useSearchParams();
 
   const [quizId, setQuizId] = useState<any>(null);
@@ -40,21 +40,6 @@ export default function Play() {
     });
   }
 
-  if (!sdkHasLoaded) {
-    return (
-      <div className="flex justify-center p-24 min-h-screen items-center">
-        Loading...
-      </div>
-    );
-  }
-
-  if (!isLoggedIn) {
-    return (
-      <div className="flex justify-center p-24 min-h-screen items-center">
-        Not logged in
-      </div>
-    );
-  }
 
   if (!quizId) {
     return (
@@ -86,7 +71,7 @@ export default function Play() {
                 </th>
               </tr>
             </thead>
-            <tbody className="flex justify-center md:justify-between text-xs md:text-base">
+            <tbody className="flex flex-col justify-center md:justify-between text-xs md:text-base">
               {leaderboard &&
                 leaderboard.map((row: any, index: number) => (
                   <tr
@@ -107,7 +92,7 @@ export default function Play() {
         </div>
         <span className="flex justify-center">
           {" "}
-          <button className="btn  btn-accent">Go to Quiz!</button>
+          <a href={"/play?quiz="+quizId}><button className="btn  btn-accent">Go to Quiz!</button></a>
         </span>
       </div>
     </div>

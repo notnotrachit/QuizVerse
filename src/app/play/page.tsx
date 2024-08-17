@@ -1,16 +1,20 @@
 "use client";
 import { useState, useEffect } from "react";
-import { useIsLoggedIn } from "@dynamic-labs/sdk-react-core";
-import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
+// import { useIsLoggedIn } from "@dynamic-labs/sdk-react-core";
+// import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { BackgroundGradient } from "@/components/ui/background-gradient";
 import Image from "next/image";
+import { useAccount } from "wagmi";
+
 
 export default function Play() {
-  const isLoggedIn = useIsLoggedIn();
-  const { sdkHasLoaded, primaryWallet } = useDynamicContext();
+  // const isLoggedIn = useIsLoggedIn();
+  // const { sdkHasLoaded, primaryWallet } = useDynamicContext();
   const searchParams = useSearchParams();
+  const { address, isConnecting, isDisconnected } = useAccount();
+
 
   const [quizId, setQuizId] = useState<any>(null);
   const [quiz, setQuiz] = useState<any>(null);
@@ -76,27 +80,20 @@ export default function Play() {
         body: JSON.stringify({
           quiz_id: quizId,
           answers: selectedAnswers,
-          user_address: primaryWallet?.address,
+          user_address: address,
         }),
       }
     ).then(async (response) => {
       console.log(response);
+      setResults(await response.json());
       setShowResults(true); // Show results after submission
       setSubmitting(false);
-      setResults(await response.json());
       console.log(results);
     });
   }
 
-  if (!sdkHasLoaded) {
-    return (
-      <div className="flex justify-center p-24 min-h-screen items-center">
-        Loading...
-      </div>
-    );
-  }
 
-  if (!isLoggedIn) {
+  if (!address) {
     return (
       <div className="flex justify-center p-24 min-h-screen items-center">
         Not logged in

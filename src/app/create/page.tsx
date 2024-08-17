@@ -216,7 +216,10 @@ export default function Home() {
                           {...(question.answer === question.options[optionIndex]
                             ? { checked: true }
                             : {})}
-                          onChange={(e) =>
+
+                          onClick={(e) => {
+                            // console.log(e.target);
+                            console.log("Changed");
                             setQuestions(
                               questions.map((q, qIndex) => {
                                 if (qIndex === index) {
@@ -229,19 +232,8 @@ export default function Home() {
                               })
                             )
                           }
-                          onSelect={(e) =>
-                            setQuestions(
-                              questions.map((q, qIndex) => {
-                                if (qIndex === index) {
-                                  return {
-                                    ...q,
-                                    answer: q.options[optionIndex],
-                                  };
-                                }
-                                return q;
-                              })
-                            )
                           }
+
                         />
                         <textarea
                           id={`option-${index}-${optionIndex}`}
