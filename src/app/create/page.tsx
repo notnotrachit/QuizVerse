@@ -52,26 +52,23 @@ export default function Home() {
       return;
     }
 
-    fetch(
-      "https://incalculable-football-gigantic.functions.on-fleek.app/save_question",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          quiz_data: questions,
-          quiz_name: quizName,
-          quiz_description: quizDescription,
-          user_address: address,
-        }),
-      }
-    )
+    fetch("https://billions-table-harsh.functions.on-fleek.app/save_question", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        quiz_data: questions,
+        quiz_name: quizName,
+        quiz_description: quizDescription,
+        user_address: address,
+      }),
+    })
       .then((response) => {
         response.json();
         setLoading(false);
         // redirect to dashboard
-        window.location.href = "/dashboard";
+        // window.location.href = "/dashboard";
       })
       .then((response) => console.log(response))
       .catch((err) => {

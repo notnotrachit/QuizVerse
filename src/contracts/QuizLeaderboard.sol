@@ -16,10 +16,10 @@ contract QuizLeaderboard {
     event ScoreAdded(address indexed player, uint256 score, uint256 timestamp);
 
     // Function to add a player's score
-    function addScore(uint256 _score) public {
+    function addScore(uint256 _score, address _player) public {
         // Add the player's score to the leaderboard
         leaderboard.push(PlayerScore({
-            playerAddress: msg.sender,
+            playerAddress: _player,
             score: _score,
             timestamp: block.timestamp
         }));
@@ -47,5 +47,11 @@ contract QuizLeaderboard {
 
         // Return the sorted leaderboard
         return sortedLeaderboard;
+    }
+    
+    // Function to retrieve the leaderboard data with player addresses and scores
+    function getLeaderboardWithScores() public view returns (PlayerScore[] memory) {
+        // Return the leaderboard array
+        return leaderboard;
     }
 }
