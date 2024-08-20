@@ -1,36 +1,51 @@
 // import mongoose from "mongoose";
 
-
-
 // import {
 //   ethers,
 //   JsonRpcProvider,
 //   parseUnits,
 // } from "ethers";
 
-const { ethers, JsonRpcProvider, parseUnits } = require('ethers');
+const { ethers, JsonRpcProvider, parseUnits } = require("ethers");
 const {
   ContractExecuteTransaction,
   ContractFunctionParameters,
   Wallet,
   LocalProvider,
   PrivateKey,
+  Client,
   AccountCreateTransaction,
   AccountDeleteTransaction,
+  EntityIdHelper,
   Hbar,
 } = require("@hashgraph/sdk");
 
 // import { Web3 } from "web3";
-const { Web3 } = require('web3');
+const { Web3 } = require("web3");
 
 require("dotenv").config();
 // console.log(process.env);
 
-
 const express = require("express");
 const app = express();
+const cors = require("cors");
+
+
 app.use(express.json());
 
+
+let corsOptions = {
+    origin: [ 'http://localhost:5500', 'http://localhost:3000', "*" ]
+};
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "*");
+  next();
+});
+
+app.use(cors(corsOptions));
+
+// const { Web3 } = require("web3");
 
 // const TursoKEY = fleek.env.TURSO_KEY;
 const TursoKEY = process.env.TursoKEY;
@@ -39,6 +54,10 @@ const privateKey = process.env.privateKey;
 
 // const web3 = new Web3("https://testnet.hashio.io/api");
 // const our_acocunt = web3.eth.accounts.wallet.add(privateKey);
+const web3 = new Web3(
+  new Web3.providers.HttpProvider("https://testnet.hashio.io/api")
+);
+const wallet = web3.eth.accounts.wallet.add(process.env.privateKey);
 
 const abi = [
   {
@@ -157,35 +176,32 @@ async function deployContract() {
 }
 
 async function addScoreToContract(
-  contract_address = "0x10A76D0603d91c2b9fE6dBA540Fe862441007f65",
-  score = 3,
-  player_address = "0x1E0eb548930Da44E8edC93990A2A2126D4F9C648"
+  contract_address,
+  score,
+  player_address
 ) {
-
-  let transaction = new ContractExecuteTransaction()
-    .setContractId(contract_address)
-    .setGas(100_000_000)
-    .setFunction(
-      "addScore",
-      new ContractFunctionParameters()
-        .addUint32(score)
-        .addAddress(player_address)
-    );
-  const our_wallet = new Wallet(privateKey);
-  transaction = await transaction.signWithSigner(our_wallet);
-  const response = await transaction.executewithSigner(our_wallet);
-  console.log("Response:", response);
-  // const our_acocunt = await web3.eth.getAccounts();
+  const adder = new web3.eth.Contract(
+    abi,
+    contract_address,
+    {
+      from: wallet[0].address,
+      gas: 300000,
+    }
+  );
+  const updateTx = await adder.methods.addScore(score, player_address).send();
+  console.log(updateTx);
 }
 
-async function getLeaderboardFromContract(contract_address) {
-  try {
-    const leaderboard = await contract.getLeaderboard();
-    console.log("Leaderboard:", leaderboard);
-    return leaderboard;
-  } catch (error) {
-    console.error("Error getting leaderboard from contract:", error);
-  }
+async function getLeaderboardFromContract(
+  contract_address
+) {
+  const leaderboard = new web3.eth.Contract(abi, contract_address, {
+    from: wallet[0].address,
+    gas: 300000,
+  });
+  const resp = await leaderboard.methods.getLeaderboard().call();
+  return resp;
+  console.log(resp);
 }
 
 async function save_question(req, res) {
@@ -393,7 +409,7 @@ async function submit_attempt(req, res) {
   return res.json({ score: score, max_score: max_score });
 }
 
-async function get_user_quizes(req,res) {
+async function get_user_quizes(req, res) {
   const body = req.body;
   const user_address = body.user_address;
   const payload = {
@@ -429,7 +445,7 @@ async function get_user_quizes(req,res) {
   return res.json(quizes);
 }
 
-async function get_leaderboard(req,res) {
+async function get_leaderboard(req, res) {
   const body = req.body;
   // get the attempts ordered by score and timestamp
   const quiz_id = body.quiz_id;
@@ -438,7 +454,7 @@ async function get_leaderboard(req,res) {
       {
         type: "execute",
         stmt: {
-          sql: `SELECT * FROM attempts WHERE quiz_id = '${quiz_id}' ORDER BY score DESC, timestamp ASC`,
+          sql: `SELECT * FROM hedera_quiz WHERE id = '${quiz_id}'`,
         },
       },
       { type: "close" },
@@ -454,18 +470,31 @@ async function get_leaderboard(req,res) {
     body: JSON.stringify(payload),
   });
   const data = await response.json();
+  // console.log(data.results[0].response.result.rows[0]);
+  const contract_address = data.results[0].response.result.rows[0][5].value;
+
+  const leaderboard_t = await getLeaderboardFromContract(contract_address);
+  console.log(typeof leaderboard_t);
   const leaderboard = [];
-  for (let i = 0; i < data.results[0].response.result.rows.length; i++) {
+
+  for (let i = 0; i < leaderboard_t.length; i++) {
     leaderboard.push({
-      user_address: data.results[0].response.result.rows[i][2].value,
-      score: data.results[0].response.result.rows[i][4].value,
-      max_score: data.results[0].response.result.rows[i][5].value,
-      timestamp: data.results[0].response.result.rows[i][6].value,
+      user_address: leaderboard_t[i]["0"],
+      score: Number(leaderboard_t[i]["1"]),
+      timestamp: Number(leaderboard_t[i]["2"]),
     });
   }
+
+  // for (let i = 0; i < data.results[0].response.result.rows.length; i++) {
+  //   leaderboard.push({
+  //     user_address: data.results[0].response.result.rows[i][2].value,
+  //     score: data.results[0].response.result.rows[i][4].value,
+  //     max_score: data.results[0].response.result.rows[i][5].value,
+  //     timestamp: data.results[0].response.result.rows[i][6].value,
+  //   });
+  // }
   return res.json(leaderboard);
 }
-
 
 // save_question({});
 
@@ -489,14 +518,11 @@ async function get_leaderboard(req,res) {
 //   },
 // });
 
-
 app.post("/get_quiz", get_quiz);
 app.post("/get_user_quizes", get_user_quizes);
 app.post("/get_leaderboard", get_leaderboard);
 app.post("/submit_attempt", submit_attempt);
 app.post("/save_question", save_question);
-app.post("/test", addScoreToContract);
-
 
 app.listen(3000, () => {
   console.log("Server started on port 3000");

@@ -52,7 +52,7 @@ export default function Home() {
       return;
     }
 
-    fetch("https://billions-table-harsh.functions.on-fleek.app/save_question", {
+    fetch("http://localhost:3000/save_question", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -68,7 +68,7 @@ export default function Home() {
         response.json();
         setLoading(false);
         // redirect to dashboard
-        // window.location.href = "/dashboard";
+        window.location.href = "/dashboard";
       })
       .then((response) => console.log(response))
       .catch((err) => {

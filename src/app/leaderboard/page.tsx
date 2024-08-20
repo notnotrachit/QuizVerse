@@ -24,7 +24,7 @@ export default function Play() {
 
   function fetch_leaderboard(quizId: any) {
     fetch(
-      "https://incalculable-football-gigantic.functions.on-fleek.app/get_leaderboard",
+      "http://localhost:3000/get_leaderboard",
       {
         method: "POST",
         headers: {

@@ -19,7 +19,7 @@ export default function Play() {
   function get_user_quiz() {
     setLoading(true);
     fetch(
-      "https://incalculable-football-gigantic.functions.on-fleek.app/get_user_quizes",
+      "http://localhost:3000/get_user_quizes",
       {
         method: "POST",
         headers: {

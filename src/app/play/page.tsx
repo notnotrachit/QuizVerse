@@ -36,7 +36,7 @@ export default function Play() {
 
   function fetch_quiz(quizId: any) {
     fetch(
-      "https://incalculable-football-gigantic.functions.on-fleek.app/get_quiz",
+      "http://localhost:3000/get_quiz",
       {
         method: "POST",
         headers: {
@@ -71,7 +71,7 @@ export default function Play() {
     setSubmitting(true);
     event.preventDefault();
     fetch(
-      "https://incalculable-football-gigantic.functions.on-fleek.app/submit_attempt",
+      "http://localhost:3000/submit_attempt",
       {
         method: "POST",
         headers: {
