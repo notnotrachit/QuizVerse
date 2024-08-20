@@ -19,7 +19,6 @@ export default function Home() {
   // console.log(isLoggedIn);
   // const { sdkHasLoaded, primaryWallet } = useDynamicContext();
 
-
   if (!address) {
     return (
       <div className="flex justify-center p-24 min-h-screen items-center">
@@ -52,7 +51,7 @@ export default function Home() {
       return;
     }
 
-    fetch("http://localhost:3000/save_question", {
+    fetch("https://quizverse.vercel.app/save_question", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -213,7 +212,6 @@ export default function Home() {
                           {...(question.answer === question.options[optionIndex]
                             ? { checked: true }
                             : {})}
-
                           onClick={(e) => {
                             // console.log(e.target);
                             console.log("Changed");
@@ -227,10 +225,8 @@ export default function Home() {
                                 }
                                 return q;
                               })
-                            )
-                          }
-                          }
-
+                            );
+                          }}
                         />
                         <textarea
                           id={`option-${index}-${optionIndex}`}

@@ -30,12 +30,10 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 
-
 app.use(express.json());
 
-
 let corsOptions = {
-    origin: [ 'http://localhost:5500', 'http://localhost:3000', "*" ]
+  origin: ["http://localhost:5500", "https://quizverse.vercel.app", "*"],
 };
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
@@ -175,26 +173,16 @@ async function deployContract() {
   }
 }
 
-async function addScoreToContract(
-  contract_address,
-  score,
-  player_address
-) {
-  const adder = new web3.eth.Contract(
-    abi,
-    contract_address,
-    {
-      from: wallet[0].address,
-      gas: 300000,
-    }
-  );
+async function addScoreToContract(contract_address, score, player_address) {
+  const adder = new web3.eth.Contract(abi, contract_address, {
+    from: wallet[0].address,
+    gas: 300000,
+  });
   const updateTx = await adder.methods.addScore(score, player_address).send();
   console.log(updateTx);
 }
 
-async function getLeaderboardFromContract(
-  contract_address
-) {
+async function getLeaderboardFromContract(contract_address) {
   const leaderboard = new web3.eth.Contract(abi, contract_address, {
     from: wallet[0].address,
     gas: 300000,

@@ -8,13 +8,11 @@ import { BackgroundGradient } from "@/components/ui/background-gradient";
 import Image from "next/image";
 import { useAccount } from "wagmi";
 
-
 export default function Play() {
   // const isLoggedIn = useIsLoggedIn();
   // const { sdkHasLoaded, primaryWallet } = useDynamicContext();
   const searchParams = useSearchParams();
   const { address, isConnecting, isDisconnected } = useAccount();
-
 
   const [quizId, setQuizId] = useState<any>(null);
   const [quiz, setQuiz] = useState<any>(null);
@@ -35,16 +33,13 @@ export default function Play() {
   }, [loading, searchParams]);
 
   function fetch_quiz(quizId: any) {
-    fetch(
-      "http://localhost:3000/get_quiz",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ quiz_id: quizId }),
-      }
-    ).then((response) => {
+    fetch("https://quizverse.vercel.app/get_quiz", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ quiz_id: quizId }),
+    }).then((response) => {
       response.json().then((data) => {
         setQuiz(data);
         console.log(data);
@@ -70,20 +65,17 @@ export default function Play() {
   function handleSubmit(event: React.FormEvent) {
     setSubmitting(true);
     event.preventDefault();
-    fetch(
-      "http://localhost:3000/submit_attempt",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          quiz_id: quizId,
-          answers: selectedAnswers,
-          user_address: address,
-        }),
-      }
-    ).then(async (response) => {
+    fetch("https://quizverse.vercel.app/submit_attempt", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        quiz_id: quizId,
+        answers: selectedAnswers,
+        user_address: address,
+      }),
+    }).then(async (response) => {
       console.log(response);
       setResults(await response.json());
       setShowResults(true); // Show results after submission
@@ -91,7 +83,6 @@ export default function Play() {
       console.log(results);
     });
   }
-
 
   if (!address) {
     return (

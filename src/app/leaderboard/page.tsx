@@ -23,23 +23,19 @@ export default function Play() {
   }, []);
 
   function fetch_leaderboard(quizId: any) {
-    fetch(
-      "http://localhost:3000/get_leaderboard",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ quiz_id: quizId }),
-      }
-    ).then((response) => {
+    fetch("https://quizverse.vercel.app/get_leaderboard", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ quiz_id: quizId }),
+    }).then((response) => {
       response.json().then((data) => {
         setLeaderboard(data);
         console.log(data);
       });
     });
   }
-
 
   if (!quizId) {
     return (
@@ -92,7 +88,9 @@ export default function Play() {
         </div>
         <span className="flex justify-center">
           {" "}
-          <a href={"/play?quiz="+quizId}><button className="btn  btn-accent">Go to Quiz!</button></a>
+          <a href={"/play?quiz=" + quizId}>
+            <button className="btn  btn-accent">Go to Quiz!</button>
+          </a>
         </span>
       </div>
     </div>

@@ -18,16 +18,13 @@ export default function Play() {
 
   function get_user_quiz() {
     setLoading(true);
-    fetch(
-      "http://localhost:3000/get_user_quizes",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ user_address: address }),
-      }
-    ).then((response) => {
+    fetch("https://quizverse.vercel.app/get_user_quizes", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ user_address: address }),
+    }).then((response) => {
       response.json().then((data) => {
         console.log(data);
         setQuizzes(data);
