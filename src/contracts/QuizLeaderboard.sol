@@ -25,7 +25,7 @@ contract QuizLeaderboard {
         }));
 
         // Emit the event
-        emit ScoreAdded(msg.sender, _score, block.timestamp);
+        emit ScoreAdded(_player, _score, block.timestamp);
     }
 
     // Function to retrieve the leaderboard data in ascending order of scores

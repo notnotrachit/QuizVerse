@@ -11,6 +11,7 @@
   "dependencies": {
     "@dynamic-labs/ethereum": "^2.2.4",
     "@dynamic-labs/sdk-react-core": "^2.2.4",
+    "@hashgraph/sdk": "^2.49.2",
     "@instructor-ai/instructor": "^1.5.0",
     "@react-icons/all-files": "^4.1.0",
     "@react-three/drei": "^9.107.0",
