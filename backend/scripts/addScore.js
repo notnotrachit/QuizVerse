@@ -12,9 +12,14 @@ async function main() {
 
     // Build the contract execute transaction
     const transaction = new ContractExecuteTransaction()
-        .setContractId(contractAddress)
-        .setGas(300000)
-        .setFunction(functionName, new ContractFunctionParameters().addAddress("0x41817bB3d9628B238cb8Ba0D909D27AB319abEfF").addUint256("69"));
+      .setContractId(contractAddress)
+      .setGas(100_000_000)
+      .setFunction(
+        functionName,
+        new ContractFunctionParameters()
+          .addAddress("0x41817bB3d9628B238cb8Ba0D909D27AB319abEfF")
+          .addUint256("69")
+      );
 
     // Execute the transaction and get the receipt
     const txResponse = await transaction.execute(client);
