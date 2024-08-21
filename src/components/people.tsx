@@ -22,6 +22,18 @@ const people = [
     image:
       "https://raw.githubusercontent.com/yash-raj10/bookmart/b933e9c848fc4e7b7e7c5db04f951963e5f59a49/public/photo_2024-06-30_21-40-25.jpg",
   },
+  {
+    id: 4,
+    name: "Urvashi",
+    designation: "Frontend Dev",
+    image: "https://avatars.githubusercontent.com/urvashi912",
+  },
+  {
+    id: 5,
+    name: "Harshita",
+    designation: "Designer",
+    image: "https://avatars.githubusercontent.com/harrsheeta",
+  },
 ];
 
 export function AnimatedTooltipPreview() {
