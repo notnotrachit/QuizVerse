@@ -117,7 +117,7 @@ export default function Home() {
 
   return (
     <main className="flex justify-center p-24 min-h-screen w-full ">
-      <div className="p-10 rounded-3xl shadow-md backdrop-blur  bg-white/10 border-2 w-3/5 h-1/2">
+      <div className="p-10 rounded-3xl shadow-md backdrop-blur  bg-gray-900 border-2 w-3/5 h-1/2">
         <div className="flex gap-2">
           {" "}
           <h1 className="text-4xl font-bold mb-6 text-center text-transparent bg-clip-text  bg-gradient-to-b from-neutral-200 to-neutral-600">
@@ -195,9 +195,9 @@ export default function Home() {
                         })
                       )
                     }
-                    className="bg-white/10 mt-1 block w-full rounded-md border-2 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 px-2"
+                    className="text-white bg-white/10 mt-1 block w-full rounded-md border-2 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 px-2"
                   />
-                  <label className="block text-base font-medium mt-2  ">
+                  <label className="block text-base font-medium mt-2  text-white">
                     Options:-
                   </label>
                   {question.options.map((option, optionIndex) => (
@@ -207,7 +207,7 @@ export default function Home() {
                           type="radio"
                           id={`answer-${index}`}
                           name={`answer-${index}`}
-                          className="mt-1 radio radio-primary"
+                          className=" mt-1 radio radio-primary"
                           placeholder={"Option"}
                           {...(question.answer === question.options[optionIndex]
                             ? { checked: true }
@@ -303,7 +303,7 @@ export default function Home() {
 
                   <label
                     htmlFor={`explanation-${index}`}
-                    className="block text-sm font-medium mt-4"
+                    className="text-white block text-sm font-medium mt-4"
                   >
                     Explanation:-
                   </label>
@@ -325,7 +325,7 @@ export default function Home() {
                         })
                       )
                     }
-                    className="bg-white/10 px-2 mt-1 block w-full rounded-md border-2 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                    className="text-white bg-white/10 px-2 mt-1 block w-full rounded-md border-2 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                   />
                   <div className="flex justify-center items-center">
                     <button

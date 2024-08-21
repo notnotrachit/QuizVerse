@@ -62,7 +62,7 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={
-          inter.className + " dark:bg-dot-white/[0.2] bg-dot-black/[0.2]"
+          inter.className + "  dark:bg-dot-white/[0.2] bg-dot-black/[0.2]"
         }
       >
         <Web3ModalProvider initialState={initialState}>
@@ -72,4 +72,4 @@ export default function RootLayout({
       </body>
     </html>
   );
-}   
+}
