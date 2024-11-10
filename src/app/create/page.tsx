@@ -296,7 +296,7 @@ export default function Home() {
             if (qIndex === index) {
               return {
                 ...q,
-                explanation: [e.target.value],
+                explanation: e.target.value,
               };
             }
             return q;
