@@ -20,7 +20,7 @@ const page = () => {
       <div className="pt-10 pb-10 bg-black">
         <GradualSpacing
           className="font-display text-center text-2xl font-bold tracking-[-0.1em]  text-violet-500 border-b-2 mb-8  dark:text-white md:text-7xl md:leading-[5rem]"
-          text=" QuizVerse"
+          text=" DeQuiz3"
         />
 
         <div className="flex justify-center items-center">
@@ -36,7 +36,6 @@ const page = () => {
           <BoxReveal boxColor={"#5046e6"} duration={0.5}>
             <h2 className="mt-[.5rem] text-white  text-[2rem]">
               and Decentralized Tomorrow!{" "}
-              <span className="text-[#5046e6]">Design Engineers</span>
             </h2>
           </BoxReveal>
         </div>

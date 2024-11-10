@@ -14,38 +14,38 @@ export function InfiniteMovingCardsDemo() {
 const testimonials = [
   {
     quote:
-      "QuizVerse has revolutionized the way I learn and challenge myself. The AI-generated quizzes are both fun and educational, making Web3 concepts easier to grasp. Highly recommended!",
+      "DeQuiz3 has revolutionized the way I learn and challenge myself. The AI-generated quizzes are both fun and educational, making Web3 concepts easier to grasp. Highly recommended!",
     name: "Swastik ",
     title: "Open Source Developer",
   },
   {
     quote:
-      "As a Web3 developer, I find QuizVerse incredibly useful for staying updated with the latest trends and technologies. The decentralized nature ensures transparency and fairness in every quiz.",
+      "As a Web3 developer, I find DeQuiz3 incredibly useful for staying updated with the latest trends and technologies. The decentralized nature ensures transparency and fairness in every quiz.",
     name: "Satyam",
     title: "Web3 Developer",
   },
   {
     quote:
-      "QuizVerse is a game-changer in the ed-tech space. The seamless integration of AI and decentralization provides a robust and immersive learning experience. A must-try for anyone interested in Web3.",
+      "DeQuiz3 is a game-changer in the ed-tech space. The seamless integration of AI and decentralization provides a robust and immersive learning experience. A must-try for anyone interested in Web3.",
     name: "Yash ",
     title: "FullStack Developer",
   },
 
   {
     quote:
-      "As a Web3 developer, I find QuizVerse incredibly useful for staying updated with the latest trends and technologies. The decentralized nature ensures transparency and fairness in every quiz.",
+      "As a Web3 developer, I find DeQuiz3 incredibly useful for staying updated with the latest trends and technologies. The decentralized nature ensures transparency and fairness in every quiz.",
     name: "Satyam",
     title: "Web3 Developer",
   },
   {
     quote:
-      "QuizVerse offers a unique blend of AI and blockchain technology. The quizzes are engaging, and the platform's decentralized structure adds a layer of trust and security that's unmatched.",
+      "DeQuiz3 offers a unique blend of AI and blockchain technology. The quizzes are engaging, and the platform's decentralized structure adds a layer of trust and security that's unmatched.",
     name: "Rakesh",
     title: "Web3 Developer",
   },
   {
     quote:
-      "I love how QuizVerse makes learning about Web3 so interactive and accessible. The AI-generated questions are always fresh and challenging, keeping me on my toes!",
+      "I love how DeQuiz3 makes learning about Web3 so interactive and accessible. The AI-generated questions are always fresh and challenging, keeping me on my toes!",
     name: "Rachit",
     title: "FullStack Developer",
   },
