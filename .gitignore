@@ -38,3 +38,4 @@ node_modules
 fleek_functions/.env
 .idea
 backend/.env
+.env
