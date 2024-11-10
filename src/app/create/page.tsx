@@ -332,7 +332,7 @@ export default function Home() {
           question: "",
           answer: "",
           options: ["", ""],
-          explanation: [],
+          explanation: "",
         },
       ])
     }
